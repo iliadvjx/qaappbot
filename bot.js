@@ -18,8 +18,8 @@ bot.command("start", (ctx) => {
 
     findUser(ctx.message.chat.id, (user, error) => {
         // ctx.session.scores = { I: 0, E: 0, N: 0, S: 0, F: 0, T: 0, P: 0, J: 0 }
-        ctx.session.scores = {E: 9, I : 30, N :7, S : 24, F : 7, T : 17, P : 14, J : 23}
-        ctx.session.q = 0;
+      //  ctx.session.scores = {E: 9, I : 30, N :7, S : 24, F : 7, T : 17, P : 14, J : 23}
+      //  ctx.session.q = 0;
         ctx.session.Status = 'N'
         if (error === 0) {
             return ctx.reply("سلام به ربات تست شخصیت شناسی خوش آمدید! ")
@@ -33,6 +33,7 @@ bot.command("start", (ctx) => {
 bot.command("/newTest", (ctx) => {
 
     ctx.session.q = 83;
+    ctx.session.scores = {E: 9, I : 30, N :7, S : 24, F : 7, T : 17, P : 14, J : 23}
     let i = ctx.session.q;
     let str = qs[i].id + '/87\n';
     str += qs[i].soal;
