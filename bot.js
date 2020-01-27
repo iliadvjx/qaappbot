@@ -24,7 +24,7 @@ bot.command("start", (ctx) => {
         if (error === 0) {
             return ctx.reply("سلام به ربات تست شخصیت شناسی خوش آمدید! ")
         } else {
-            return ctx.reply("برگشتی؟")
+            return ctx.reply("سلام به ربات آیینه خوش آمدید. \nبا زدن /newTest آزمون را شروع کنید! ")
         }
     })
     //console.log(uuser)
