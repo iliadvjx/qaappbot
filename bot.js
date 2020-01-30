@@ -131,7 +131,7 @@ bot.on('callback_query', (ctx) => {
 
 
 })
-
+const fs = require('fs')
 bot.on('text',r=>{
     let status  = r.session.Status;
     if(status=== 'NAME'){
@@ -156,6 +156,12 @@ bot.on('text',r=>{
        drs += res.flags[2] + " : " + res.d[2] + '%\n'
        drs += res.flags[3] + " : " + res.d[3] + '%\n'
        r.session.Status = 'NAN'
+
+       r.replyWithPhoto({source: fs.createReadStream('./pics/'+ res.flags + '.png')}).then(err=>{
+           console.log(err,'send or not?')
+       }).catch(err=>{
+           console.log(err)
+       })
       return r.reply(drs)
        
     // console.log(res.flags[0])
