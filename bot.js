@@ -47,7 +47,7 @@ bot.hears(["شروع تست", 'ریست'], (ctx) => {
     //     return ctx.reply('شما درحال انجام آزمون هستید آیا مطمئنید میخواهید دوباره شروع کنید؟')
     // }
 
-    ctx.session.q = 86;
+    ctx.session.q = 0;
     // ctx.session.scores = { I: 0, E: 0, N: 0, S: 0, F: 0, T: 0, P: 0, J: 0 }
     ctx.session.scores = { E: 9, I: 30, N: 7, S: 24, F: 7, T: 17, P: 14, J: 23 }
     let i = ctx.session.q;
