@@ -5,51 +5,69 @@ const Markup = require('telegraf/markup')
 const validator = require('validator')
 const request = require('request')
 const qs = require('./data.json')
-const bot = new tg("881789931:AAEdbQajDCGnL7TvdTKNzcmgsSF7YsXCcIE")
-
+const bot = new tg("902595979:AAEPohupjhoXqI16V_62ysIHkkqrcrns0No")
+const fs = require('fs')
 bot.use(session())
 
-//   ctx.telegram.sendMessage
-
-let userClass = {}
-
+// saveID('1')
 bot.command("start", (ctx) => {
     console.log('START : Name:', ctx.message.chat.first_name, '|| Username:', ctx.message.chat.username, '|| ID:', ctx.message.chat.id)
+    saveID(ctx.message.chat.id);
+    getRole(ctx)
+    // findUser(ctx.message.chat.id, (user, error) => {
+    console.log(ctx.session.role)
+ 
+    ctx.session.Status = 'TEST'
+    bot.telegram.sendMessage('147721692', `START : Name:  ${ctx.message.chat.first_name} || Username: ${ctx.message.chat.username} || ID:  ${ctx.message.chat.id}`,
+        {
+            disable_notification: true
+        })
+    //    console.log(x)
+    ctx.reply("سلام به ربات تست شخصیت شناسی خوش آمدید! ", Markup
+        .keyboard([
+            ['شروع تست']
+            , ['راهنما', 'تاریخچه اجرای تست']
+        ])
+        .oneTime()
+        .resize()
+        .extra()
+    )
 
-    findUser(ctx.message.chat.id, (user, error) => {
+    setTimeout(()=>{
+        ctx.reply(`❗️ تست mbti به شما کمک میکنه که درک بهتری از شخصیت خودتون و اطرافیانتون پیدا کنید و تو زمینه هایی مثل:
 
-        //  ctx.session.scores = {E: 9, I : 30, N :7, S : 24, F : 7, T : 17, P : 14, J : 23}
-        //  ctx.session.q = 0;
-        ctx.session.Status = 'TEST'
-        //  if (error === 0) {
-        //    let x = await tg.Telegram.sendMessage('147721692','یکی آمد!')
-        bot.telegram.sendMessage('147721692', `START : Name:  ${ctx.message.chat.first_name} || Username: ${ctx.message.chat.username} || ID:  ${ctx.message.chat.id}`,
-            {
-                disable_notification: true
-            })
-        //    console.log(x)
-        return ctx.reply("سلام به ربات تست شخصیت شناسی خوش آمدید! ", Markup
-            .keyboard([
-                ['شروع تست']
+        ✅  ۱) خودشناسی و شناخت بهتر جنبه های مختلف شخصیت خودتون
+  
+        ✅  ۲) ارتباط بهتر با نزدیکان و دوستانتون با شناخت شخصیت اونها
+  
+        ✅  ۳) انتخاب شغل مناسب خودتون یا بهبود عملکردتون تو شغل فعلیتون
+  
+        ✅  ۴) انتخاب همسر مناسبتون یا ارتباط بهتر با همسرتون
+  
+        ✅  ۵) پدر و مادری بهتر و تاثیر گذار تر شدن برای فرزند عزیتون
+  
+        ✅  ۶) مشاوره ی بهتر به مراجعینتون  با در نظر گرفتن ابعاد شخصیت فرد
+  
+        ✅  ۷) بازدهی بیشتر در گروهی که در اون کار میکنید یا مدیری بهتر و کارآمد تر شدن با شناخت بهتر کارمندهاتون
+  
+        ⚜️  و در کلی زمینه های دیگه کمکتون میکنه و به شما حس کارآمدی بیشتری میده
+  
+        ‼️  توجه : پیشنهاد میکنیم برای نتیجه ی بهتر و درست تر حتما راهنمای تست رو قبل انجام اون مطالعه کنید`)
+    }, 1050)
+     
 
-            ])
-            .oneTime()
-            .resize()
-            .extra()
-        )
 
-    })
     //console.log(uuser)
 })
 
-bot.hears(["شروع تست", 'ریست'], (ctx) => {
+bot.hears(["شروع تست", 'شروع مجدد'], (ctx) => {
     // if(ctx.session.Status == 'TEST'){
     //     return ctx.reply('شما درحال انجام آزمون هستید آیا مطمئنید میخواهید دوباره شروع کنید؟')
     // }
 
     ctx.session.q = 0;
-    // ctx.session.scores = { I: 0, E: 0, N: 0, S: 0, F: 0, T: 0, P: 0, J: 0 }
-    ctx.session.scores = { E: 9, I: 30, N: 7, S: 24, F: 7, T: 17, P: 14, J: 23 }
+    ctx.session.scores = { I: 0, E: 0, N: 0, S: 0, F: 0, T: 0, P: 0, J: 0 }
+    // ctx.session.scores = { E: 9, I: 30, N: 7, S: 24, F: 7, T: 17, P: 14, J: 23 }
     let i = ctx.session.q;
     let str = qs[i].id + '/87\n';
     str += qs[i].soal;
@@ -59,9 +77,9 @@ bot.hears(["شروع تست", 'ریست'], (ctx) => {
     str += ' ' + qs[i].javab2;
     ctx.session.qId = qs[i].id;
     ctx.session.ans = { n1: qs[i].nomre1, n2: qs[i].nomre2 }
-    ctx.reply('آزمون شما شروع شد. برای شروع دوباره میتوانید ریست را بفرستید.', Markup
+    ctx.reply('آزمون شما شروع شد. برای شروع دوباره میتوانید شروع مجدد را بفرستید.', Markup
         .keyboard([
-            ['ریست']
+            ['شروع مجدد']
 
         ])
         .oneTime()
@@ -81,7 +99,17 @@ bot.hears(["شروع تست", 'ریست'], (ctx) => {
     })
 
 })
-
+bot.hears('بازگشت' , ctx =>{
+    ctx.reply("برگشتید به منو ", Markup
+        .keyboard([
+            ['شروع تست']
+            , ['راهنما', 'تاریخچه اجرای تست']
+        ])
+        .oneTime()
+        .resize()
+        .extra()
+    )
+})
 bot.on('callback_query', (ctx) => {
     let x = ctx.update.callback_query.data;
     let d;
@@ -157,8 +185,25 @@ bot.on('callback_query', (ctx) => {
 
 
 })
-const fs = require('fs')
-bot.on('text', r => {
+
+bot.hears('راهنما', ctx => {
+   return ctx.replyWithPhoto('https://dl.hasanabaadi.com/pics/help.png',
+   Extra.caption('@Ayene1bot'))
+})
+
+bot.hears('تاریخچه اجرای تست', ctx => {
+    findUser(ctx.message.chat.id , (body,st)=>{
+        if(st == 1){
+            let str =  'نتایج تست های قبلی شما:\n';
+            body.flags.forEach((item)=>{
+               str += item.flag + '\n'
+            })
+            ctx.reply(str)
+        }
+    })
+ })
+
+ bot.on('text', r => {
     let status = r.session.Status;
     if (status === 'NAME') {
         r.session.Name = r.message.text
@@ -181,33 +226,136 @@ bot.on('text', r => {
         let svBODY = {}
         svBODY.tgUN = r.message.chat.username
         svBODY.tgid = r.message.chat.id
-        svBODY.name = r.session.Name 
+        svBODY.name = r.session.Name
         svBODY.lastname = r.session.lastName
         svBODY.email = r.session.Email
 
-        fireReq(svBODY,res.flags,err=>{console.log(err)})
+        fireReq(svBODY, res.flags, err => { console.log(err) })
 
         console.log(r.message.text, ' for id: ', r.message.chat.id, r.message.chat.first_name)
-        r.reply('فلگ شما:   ' + res.flags)
-        let drs = 'درصدها: \n'
+        // r.reply()
+        let drs = 'نتیجه تست شخصیت شناسی شما: ' + res.flags + '\n\n'
+         drs += 'درصدها: \n'
         drs += res.flags[0] + " : " + res.d[0] + '%\n'
         drs += res.flags[1] + " : " + res.d[1] + '%\n'
         drs += res.flags[2] + " : " + res.d[2] + '%\n'
         drs += res.flags[3] + " : " + res.d[3] + '%\n'
+        drs+='\n@Ayene1bot'
         r.session.Status = 'NAN'
-
-        r.replyWithPhoto('https://dl.hasanabaadi.com/pics/' + res.flags + '.png',
+        r.reply(drs,Markup
+            .keyboard([
+                ['بازگشت']
+               
+            ])
+            .oneTime()
+            .resize()
+            .extra()
+            
+            )
+        setTimeout(()=>{
+            r.replyWithPhoto('https://dl.hasanabaadi.com/pics/' + res.flags + '.png',
             Extra.caption('اطلاعاتی درباره شخصیت شما به مختصر\nموارد بیشتر در:\nhttps://hasanabaadi.com\n\n@Ayene1bot'))
             .then(err => {
-                ///    console.log(err,'send or not?')
+                // console.log(err, 'send or not?')
             }).catch(err => {
-                //  console.log(err)
+                console.log(err)
             })
-        return r.reply(drs)
+        },1050)
+
+        setTimeout(()=>{
+            r.reply(
+`🔷این عکس فقط یک نمای کلی از شخصیت شماست،
+هنوز کلی حرف داریم برات😉!!
+🔶از اینکه برای خودت وقت گذاشتی و تست رو انجام دادی بهت تبریک میگم دوست من
+🔷اما برای اینکه خیلی بهتر و بیشتر با نتایج جالب این تست آشنا بشی و اطلاعات فوق العاده جالب تری راجب تست mbti و شخصیتت بدست بیاری همین حالا روی لینک زیر کلیک کن و آموزش کاملا رایگان مارو دانلود کن👇:
+<a href="https://www.hasanabaadi.com/">دانلود!</a>
+`
+,{parse_mode:'HTML'}
+)
+        },1500)
+       
+        return 
 
         // console.log(res.flags[0])
     }
 })
+bot.command('/admin',ctx => {
+    // console.log('heyyyyyy', 1)
+    // console.log(ctx.session.role)
+    if (ctx.session.role == 'admin') {
+        ctx.reply('سلام ادمین یکی از اپشن هارو انتخاب کن',
+            Markup
+                .keyboard([
+                    ['آمار کلی']
+                    , ['ارسال پیام به همه']
+                    , ['بازگشت']
+                ])
+                .oneTime()
+                .resize()
+                .extra()
+        )
+    }
+})
+
+bot.hears(['آمار کلی'], ctx => {
+    // console.log('is ok')
+    if (ctx.session.role == 'admin') {
+        request({
+            url:'http://qaapp-sv.herokuapp.com/info',
+            method: 'GET',
+            json:true
+        },function (error, response, body) {
+            // console.log(body)
+            console.log(body.ESTP / body.test_Count)
+            let str = 
+`
+تعداد کاربران: ${body.user_Count},
+تعداد تست های انجام شده: ${body.test_Count},
+ESTP:  ${Math.floor(body.ESTP / body.test_Count * 100) }% ,
+ESFJ:  ${Math.floor(body.ESFJ / body.test_Count * 100) }% ,
+ESTJ:  ${Math.floor(body.ESTJ / body.test_Count * 100) }% ,
+ESFP:  ${Math.floor(body.ESFP / body.test_Count * 100) }% ,
+ENFP:  ${Math.floor(body.ENFP / body.test_Count * 100) }% ,
+ENTP:  ${Math.floor(body.ENTP / body.test_Count * 100) }% ,
+ENTJ:  ${Math.floor(body.ENTJ / body.test_Count * 100) }% ,
+ENJF:  ${Math.floor(body.ENJF / body.test_Count * 100) }% ,
+ISTJ:  ${Math.floor(body.ISTJ / body.test_Count * 100) }% ,
+ISTP:  ${Math.floor(body.ISTP / body.test_Count * 100) }% ,
+ISFP:  ${Math.floor(body.ISFP / body.test_Count * 100) }% ,
+ISFJ:  ${Math.floor(body.ISFJ / body.test_Count * 100) }% ,
+INFP:  ${Math.floor(body.INFP / body.test_Count * 100) }% ,
+INFJ:  ${Math.floor(body.INFJ / body.test_Count * 100) }% ,
+INTJ:  ${Math.floor(body.INTJ / body.test_Count * 100) }% ,
+INTP:  ${Math.floor(body.INTP / body.test_Count * 100) }% ,
+`
+            ctx.reply(str)
+        })
+    }
+})
+bot.hears('ارسال پیام به همه', ctx => {
+    if (ctx.session.role == 'admin') {
+        ctx.session.Status = 'admin_msg'
+        ctx.reply('پیام خود را بفرستید. توجه داشته باشین که برای فرستادن عکس کپشن لازم است در غیر این صورت ربات ارسال نخواهد کرد.')
+        
+    }
+})
+
+bot.on('message', ctx => {
+    if (ctx.session.Status == 'admin_msg') {
+        // console.log(ctx.message)
+        let file = fs.readFileSync('ids.txt').toString().split(",")
+        
+        file.forEach(id =>{
+            bot.telegram.sendCopy(id,ctx.message).then(t=>{
+                // ctx.reply('پیام با موفقیت ارسال شد')
+                ctx.session.Status = 'NaN'
+            })
+        })
+        
+    }
+})
+
+
 
 
 
@@ -273,24 +421,24 @@ function flagCalc(scores) {
 
 }
 
-function fireReq(info, flags , cb) {
+function fireReq(info, flags, cb) {
     // console.log(info)
     request({
-        url:'http://qaapp-sv.herokuapp.com/email',
+        url: 'http://qaapp-sv.herokuapp.com/email',
         method: 'POST',
-        body: { name : info.name , lastname : info.lastname , email:info.email , flag: flags, tgID: info.tgid , tgUsername: info.tgUN },
+        body: { name: info.name, lastname: info.lastname, email: info.email, flag: flags, tgID: info.tgid, tgUsername: info.tgUN },
         json: true,
         headers: { "accept": "application/json", "content-type": "application/json" }
     }, function (error, response, body) {
-        if (!error){
-           console.log(body)
-           cb(1)
+        if (!error) {
+            //    console.log(body)
+            cb(1)
         }
-        // else {
-        //     alert('خطا در هنگام ثبت ایمیل، لطفا اتصال اینترنت خود را بررسی کنید یا از طریق فرم تماس مشکل را گزارش دهید.')
-        //     cb(0)
-        // }
-       
+        else {
+            //alert('خطا در هنگام ثبت ایمیل، لطفا اتصال اینترنت خود را بررسی کنید یا از طریق فرم تماس مشکل را گزارش دهید.')
+            cb(0)
+        }
+
     })
 
 }
@@ -306,4 +454,25 @@ function findUser(id, cb) {
         } else
             cb(undefined, 0)
     })
+}
+
+
+
+const getRole = c => {
+    console.log(c.message.chat.id)
+    if (c.message.chat.id == '147721692')
+        c.session.role = 'admin'
+    else
+        c.session.role = 'user'
+}
+
+function saveID(id) {
+    let file = fs.readFileSync('./ids.txt');
+    let arr = file.toString().split(",")
+    // console.log(arr , ' -- ' , arr.indexOf(id.toString()))
+    if (arr.indexOf(String(id)) === -1) {
+        arr.push(id)
+        fs.writeFileSync('ids.txt', arr)
+    }
+    // console.log(arr)
 }
